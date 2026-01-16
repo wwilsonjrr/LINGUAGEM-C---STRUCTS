@@ -1,0 +1,51 @@
+/*
+2. Implemente um programa que leia o nome, a idade e o endereço de uma pessoa
+e armazene os dados em uma estrutura.
+*/
+
+#include <stdio.h>   // Inclui funções de entrada e saída como printf, scanf, fgets
+#include <stdlib.h>  // Inclui funções padrão, como system("pause")
+#include <string.h>  // Inclui funções para manipulação de strings (strlen, etc.)
+
+// --- DEFINIÇÃO DA ESTRUTURA ---
+// Aqui criamos uma estrutura chamada "Pessoa" que agrupa vários tipos de dados diferentes
+struct Pessoa
+{
+    char nome[50];       // Campo que armazena o nome da pessoa (máx. 49 caracteres + '\0')
+    int idade;           // Campo que armazena a idade (número inteiro)
+    char endereco[100];  // Campo que armazena o endereço (máx. 99 caracteres + '\0')
+};
+
+
+int main()  // Função principal onde o programa começa a execução
+{
+    struct Pessoa p1;  // Declara uma variável do tipo "Pessoa" chamada p1
+
+    // --- ENTRADA DE DADOS ---
+
+    printf("Digite o nome: ");              // Exibe mensagem pedindo o nome
+    fgets(p1.nome, sizeof(p1.nome), stdin); // Lê o nome do usuário (permite espaços)
+
+    // Remove o '\n' do fim do fgets
+    p1.nome[strcspn(p1.nome, "\n")] = '\0';
+
+    printf("Digite a idade: "); // Exibe mensagem pedindo a idade
+    scanf("%d", &p1.idade);     // Lê um número inteiro e armazena em p1.idade
+
+    getchar(); // Lê e descarta o '\n' deixado no buffer pelo scanf (evita erro no próximo fgets)
+
+    printf("Digite o endereco: ");               // Exibe mensagem pedindo o endereço
+    fgets(p1.endereco, sizeof(p1.endereco), stdin); // Lê o endereço (permite espaços)
+
+    // Remove o '\n' do fim do fgets
+    p1.endereco[strcspn(p1.endereco, "\n")] = '\0';
+
+    // --- SAÍDA DE DADOS ---
+    printf("\n=== Dados da Pessoa ===\n");  // Cabeçalho da saída
+    printf("Nome: %s\n", p1.nome);          // Exibe o nome armazenado na estrutura
+    printf("Idade: %d anos\n", p1.idade);  // Exibe a idade armazenada
+    printf("Endereco: %s\n", p1.endereco); // Exibe o endereço armazenado
+
+    system("pause"); // Pausa o programa (útil no Windows para manter o console aberto)
+    return 0;        // Indica que o programa terminou corretamente
+}
