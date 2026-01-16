@@ -1,0 +1,97 @@
+/*
+1. Escreva um trecho de código para fazer a criação dos novos tipos de dados conforme solicitado abaixo:
+
+• Horário: composto de hora, minutos e segundos.
+• Data: composto de dia, mês e ano.
+• Compromisso: composto de uma data, horário e texto que descreve o compromisso.
+
+
+struct Data data;
+struct Data → tipo criado por você
+
+data → variável desse tipo
+
+
+
+
+struct Data data;
+👉 A primeira palavra (struct Data) é o TIPO
+👉 A segunda palavra (data) é o NOME da variável
+
+
+
+*/
+
+#include <stdio.h>   // Biblioteca padrão de entrada e saída (printf, scanf)
+#include <stdlib.h>  // Biblioteca padrão (para system("pause"))
+#include <string.h>  // Biblioteca para manipulação de strings
+
+
+// --- DEFINIÇÃO DE NOVOS TIPOS DE DADOS ---
+
+// Estrutura que representa um horário (hora, minuto e segundo)
+struct Horario
+{
+    int hora;     // Armazena a hora (0 a 23)
+    int minuto;   // Armazena o minuto (0 a 59)
+    int segundo;  // Armazena o segundo (0 a 59)
+};
+
+// Estrutura que representa uma data (dia, mês e ano)
+struct Data
+{
+    int dia;   // Armazena o dia do mês (1 a 31)
+    int mes;   // Armazena o mês (1 a 12)
+    int ano;   // Armazena o ano (ex: 2025)
+};
+
+// Estrutura que representa um compromisso
+struct Compromisso
+{
+    struct Data data;       // Cada compromisso contém uma data
+    struct Horario horario; // Cada compromisso contém um horário
+    char texto[100];        // Texto descritivo do compromisso (ex: "Reunião com a equipe")
+};
+
+
+int main()  // Função principal
+{
+    struct Compromisso c1;  // Declara uma variável do tipo "Compromisso" chamada c1
+
+    // --- ENTRADA DE DADOS ---
+    printf("Digite o dia do compromisso: ");
+    scanf("%d", &c1.data.dia);  // Lê o dia e armazena dentro da estrutura Data, que está dentro de Compromisso
+
+    printf("Digite o mes do compromisso: ");
+    scanf("%d", &c1.data.mes);  // Lê o mês
+
+    printf("Digite o ano do compromisso: ");
+    scanf("%d", &c1.data.ano);  // Lê o ano
+
+    printf("Digite a hora do compromisso: ");
+    scanf("%d", &c1.horario.hora);  // Lê a hora
+
+    printf("Digite os minutos do compromisso: ");
+    scanf("%d", &c1.horario.minuto);  // Lê os minutos
+
+    printf("Digite os segundos do compromisso: ");
+    scanf("%d", &c1.horario.segundo);  // Lê os segundos
+
+    getchar();  // Limpa o '\n' deixado pelo scanf antes da leitura da string
+
+    printf("Descreva o compromisso: ");
+    fgets(c1.texto, sizeof(c1.texto), stdin);  // Lê o texto do compromisso (pode conter espaços)
+
+    // Remove o '\n' que o fgets adiciona no final, se existir
+    c1.texto[strcspn(c1.texto, "\n")] = '\0';
+
+
+    // --- SAÍDA DE RESULTADOS ---
+    printf("\n=== Dados do Compromisso ===\n");
+    printf("Data: %02d/%02d/%04d\n", c1.data.dia, c1.data.mes, c1.data.ano);  // Exibe data formatada
+    printf("Horario: %02d:%02d:%02d\n", c1.horario.hora, c1.horario.minuto, c1.horario.segundo);  // Exibe horário formatado
+    printf("Descricao: %s\n", c1.texto);  // Exibe o texto descritivo do compromisso
+
+    system("pause");  // Pausa o programa (somente no Windows)
+    return 0;         // Retorna 0, indicando execução bem-sucedida
+}
