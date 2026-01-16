@@ -1,0 +1,65 @@
+/*
+3. Construa uma estrutura aluno com nome, número de matrícula e curso.
+   Leia do usuário a informação de 5 alunos, armazene em vetor dessa estrutura
+   e imprima os dados na tela.
+*/
+
+#include <stdio.h>   // Inclui funções de E/S (printf, scanf, fgets)
+#include <stdlib.h>  // Inclui utilidades gerais (ex.: system("pause"))
+#include <string.h>  // Inclui funções para strings (strlen)
+
+// --- DEFINIÇÃO DA ESTRUTURA ---
+
+struct Aluno               // Cria o tipo composto "Aluno"
+{
+    char nome[50];         // Campo para o nome (até 49 chars + '\0')
+    int  matricula;        // Campo para o número de matrícula
+    char curso[50];        // Campo para o nome do curso (até 49 chars + '\0')
+};
+
+int main()                 // Função principal do programa
+{
+    struct Aluno alunos[5]; // Vetor com 5 elementos do tipo Aluno
+    int i;                  // Variável de controle para laços
+
+    printf("=== Cadastro de 5 alunos ===\n\n"); // Cabeçalho inicial
+
+    for (i = 0; i < 5; i++)                     // Loop para ler dados dos 5 alunos
+    {
+        printf("Aluno %d:\n", i + 1);           // Indica qual aluno está sendo cadastrado
+
+        printf("Digite o nome: ");              // Pede o nome completo
+        fgets(alunos[i].nome, sizeof(alunos[i].nome), stdin); // Lê a linha (aceita espaços)
+
+        // Remove o '\n' do fim do fgets
+        alunos[i].nome[strcspn(alunos[i].nome, "\n")] = '\0';
+
+        printf("Digite o numero de matricula: "); // Pede a matrícula
+        scanf("%d", &alunos[i].matricula);        // Lê a matrícula (inteiro)
+
+        getchar();                                 // Consome o '\n' deixado no buffer pelo scanf
+
+        printf("Digite o curso: ");               // Pede o curso
+        fgets(alunos[i].curso, sizeof(alunos[i].curso), stdin); // Lê o curso (aceita espaços)
+
+        // Remove o '\n' do fim do fgets
+        alunos[i].curso[strcspn(alunos[i].curso, "\n")] = '\0';
+
+        printf("\n");                             // Linha em branco entre cadastros
+    }
+
+    printf("\n=== Dados dos alunos cadastrados ===\n"); // Cabeçalho da listagem
+
+    for (i = 0; i < 5; i++)                       // Loop para imprimir todos os registros
+    {
+        printf("\nAluno %d:\n", i + 1);           // Título do bloco do aluno i
+        printf("Nome: %s\n", alunos[i].nome);     // Exibe o nome do aluno
+        printf("Matricula: %d\n", alunos[i].matricula); // Exibe a matrícula
+        printf("Curso: %s\n", alunos[i].curso);   // Exibe o curso
+    }
+
+    printf("\nCadastro finalizado com sucesso!\n"); // Mensagem final
+
+    system("pause");                               // Mantém janela aberta (Windows)
+    return 0;                                      // Encerra o programa com sucesso
+}
