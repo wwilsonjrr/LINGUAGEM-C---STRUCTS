@@ -1,0 +1,97 @@
+/*
+6. Faça um programa que realize a leitura dos seguintes dados relativos a um conjunto de alunos:
+   Matrícula, Nome, Código da Disciplina, Nota1 e Nota2.
+   Considere uma turma de até 10 alunos.
+   Após ler todos os dados digitados, e depois de armazená-los em um vetor de estrutura,
+   exibir na tela a listagem final dos alunos com as suas respectivas médias finais
+   (use média ponderada: Nota1 com peso 1.0 e Nota2 com peso 2.0).
+
+
+   Media Ponderada = (N1*P1)+(N2*P2)
+                     ---------------
+                         P1 + P2
+
+   N1, N2 --> NOTAS
+   P1, P2 --> PESOS
+
+*/
+
+#include <stdio.h>   // Biblioteca padrão de entrada e saída
+#include <stdlib.h>  // Biblioteca padrão (para system("pause"))
+#include <string.h>  // Biblioteca de manipulação de strings 
+
+
+// --- DEFINIÇÃO DA ESTRUTURA ---
+// Estrutura para representar os dados de um aluno
+struct Aluno
+{
+    int matricula;           // Número de matrícula do aluno
+    char nome[50];           // Nome completo do aluno
+    char codigo_disciplina[10]; // Código da disciplina
+    float nota1;             // Primeira nota
+    float nota2;             // Segunda nota
+    float media;             // Média ponderada final
+};
+
+
+int main()  // Função principal
+{
+    struct Aluno alunos[10];  // Vetor para armazenar até 10 alunos
+    int n;                    // Número de alunos que serão lidos
+    int i;                    // Variável de controle do laço
+
+    // --- ENTRADA DE DADOS ---
+    printf("Quantos alunos deseja cadastrar (maximo 10)? ");
+    scanf("%d", &n);  // Lê a quantidade de alunos
+    getchar();         // Limpa o '\n' deixado pelo scanf
+
+    printf("\n=== Cadastro dos Alunos ===\n\n");
+
+    // Loop para ler os dados de cada aluno
+    for (i = 0; i < n; i++)
+    {
+        printf("Aluno %d:\n", i + 1);
+
+        printf("Matricula: ");
+        scanf("%d", &alunos[i].matricula);  // Lê matrícula
+        getchar();                          // Limpa o buffer
+
+        printf("Nome: ");
+        fgets(alunos[i].nome, sizeof(alunos[i].nome), stdin);  // Lê nome completo
+        alunos[i].nome[strcspn(alunos[i].nome, "\n")] = '\0';   // Remove o '\n' do fim do fgets
+
+        printf("Codigo da disciplina: ");
+        fgets(alunos[i].codigo_disciplina, sizeof(alunos[i].codigo_disciplina), stdin);  // Lê código
+        alunos[i].codigo_disciplina[strcspn(alunos[i].codigo_disciplina, "\n")] = '\0';   // Remove o '\n' do fim do fgets
+
+        printf("Nota 1: ");
+        scanf("%f", &alunos[i].nota1);  // Lê a primeira nota
+
+        printf("Nota 2: ");
+        scanf("%f", &alunos[i].nota2);  // Lê a segunda nota
+
+        // Calcula a média ponderada: (nota1 * 1 + nota2 * 2) / 3
+        alunos[i].media = (alunos[i].nota1 * 1.0 + alunos[i].nota2 * 2.0) / 3.0;
+
+        printf("\n");
+        getchar();  // Limpa o buffer para próxima leitura
+    }
+
+    // --- SAÍDA DE DADOS ---
+    printf("\n=== Listagem Final dos Alunos ===\n");
+
+    // Exibe a listagem dos alunos com médias finais
+    for (i = 0; i < n; i++)
+    {
+        printf("\nAluno %d:\n", i + 1);
+        printf("Matricula: %d\n", alunos[i].matricula);                     // Mostra matrícula
+        printf("Nome: %s\n", alunos[i].nome);                              // Mostra nome
+        printf("Codigo da disciplina: %s\n", alunos[i].codigo_disciplina);  // Mostra código da disciplina
+        printf("Nota 1: %.2f\n", alunos[i].nota1);                         // Mostra nota 1
+        printf("Nota 2: %.2f\n", alunos[i].nota2);                         // Mostra nota 2
+        printf("Media final (ponderada): %.2f\n", alunos[i].media);        // Mostra média final
+    }
+
+    system("pause");  // Pausa a execução (somente no Windows)
+    return 0;         // Indica execução bem-sucedida
+}
