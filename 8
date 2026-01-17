@@ -1,0 +1,95 @@
+/*
+8. Faça um programa que armazene em um registro de dados (estrutura composta)
+os dados de um funcionário de uma empresa, compostos de:
+Nome, Idade, Sexo (M/F), CPF, Data de Nascimento,
+Código do Setor onde trabalha (0-99), Cargo (até 30 caracteres) e Salário.
+
+Os dados devem ser digitados pelo usuário, armazenados na estrutura e exibidos na tela.
+*/
+
+#include <stdio.h>   // Inclui funções de entrada e saída, como printf e scanf
+#include <stdlib.h>  // Inclui funções do sistema, como system("pause")
+#include <string.h>  // Inclui funções para manipulação de strings (strlen, fgets)
+
+
+// Declaração de uma estrutura chamada "Funcionario"
+struct Funcionario
+{
+    char nome[50];       // Armazena o nome completo do funcionário
+    int idade;           // Armazena a idade do funcionário
+    char sexo;           // Armazena o sexo (M para masculino, F para feminino)
+    char cpf[15];        // Armazena o CPF no formato "000.000.000-00"
+    char nascimento[11]; // Armazena a data de nascimento "DD/MM/AAAA"
+    int setor;           // Armazena o código do setor (entre 0 e 99)
+    char cargo[30];      // Armazena o cargo ocupado pelo funcionário
+    float salario;       // Armazena o salário do funcionário
+};
+
+
+int main()  // Função principal — ponto de partida do programa
+{
+    struct Funcionario f;  // Cria uma variável 'f' do tipo struct Funcionario
+
+    // --- ENTRADA DE DADOS ---
+    printf("=== Cadastro de Funcionario ===\n\n");  // Título do programa
+
+    // Leitura do nome
+    printf("Nome: ");
+    fgets(f.nome, sizeof(f.nome), stdin);  // Lê o nome com espaços e guarda em 'f.nome'
+
+    // Remove o caractere '\n' que o fgets insere ao final da string
+    f.nome[strcspn(f.nome, "\n")] = '\0';
+
+    // Leitura da idade
+    printf("Idade: ");
+    scanf("%d", &f.idade);  // Lê um número inteiro e armazena em 'idade'
+
+    getchar();  // Limpa o buffer de entrada (remove o '\n' deixado pelo scanf)
+
+    // Leitura do sexo
+    printf("Sexo (M/F): ");
+    scanf("%c", &f.sexo);  // Lê um caractere (M ou F)
+
+    getchar();  // Limpa o buffer novamente para as próximas leituras de string
+
+    // Leitura do CPF
+    printf("CPF (formato 000.000.000-00): ");
+    fgets(f.cpf, sizeof(f.cpf), stdin);  // Lê o CPF como string
+    f.cpf[strcspn(f.cpf, "\n")] = '\0'; // Remove o '\n' final
+
+    // Leitura da data de nascimento
+    printf("Data de nascimento (DD/MM/AAAA): ");
+    fgets(f.nascimento, sizeof(f.nascimento), stdin);  // Lê a data como string
+    f.nascimento[strcspn(f.nascimento, "\n")] = '\0';  // Remove o '\n'
+
+    // Leitura do código do setor
+    printf("Código do setor (0-99): ");
+    scanf("%d", &f.setor);  // Lê o código do setor (inteiro)
+
+    getchar();  // Limpa o buffer antes de ler o cargo
+
+    // Leitura do cargo
+    printf("Cargo (ate 30 caracteres): ");
+    fgets(f.cargo, sizeof(f.cargo), stdin);  // Lê o cargo com espaços
+    f.cargo[strcspn(f.cargo, "\n")] = '\0';  // Remove o '\n' final
+
+    // Leitura do salário
+    printf("Salario (R$): ");
+    scanf("%f", &f.salario);  // Lê o salário como número real
+
+
+    // --- SAÍDA DE DADOS ---
+    printf("\n=== Dados do Funcionario Cadastrado ===\n");  // Cabeçalho da saída
+
+    printf("Nome: %s\n", f.nome);              // Exibe o nome do funcionário
+    printf("Idade: %d\n", f.idade);            // Exibe a idade
+    printf("Sexo: %c\n", f.sexo);              // Exibe o sexo
+    printf("CPF: %s\n", f.cpf);                // Exibe o CPF
+    printf("Data de nascimento: %s\n", f.nascimento);  // Exibe a data de nascimento
+    printf("Codigo do setor: %d\n", f.setor);  // Exibe o código do setor
+    printf("Cargo: %s\n", f.cargo);            // Exibe o cargo
+    printf("Salario: R$ %.2f\n", f.salario);   // Exibe o salário com duas casas decimais
+
+    system("pause");  // Pausa o programa (somente em Windows)
+    return 0;         // Indica que o programa terminou com sucesso
+}
