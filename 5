@@ -1,0 +1,63 @@
+/*
+5. Considerando a estrutura
+
+struct Vetor
+{
+    float x;
+    float y;
+    float z;
+};
+
+para representar um vetor no R³,
+implemente um programa que calcule a soma de dois vetores.
+*/
+
+#include <stdio.h>   // Biblioteca padrão de entrada e saída (printf, scanf)
+#include <stdlib.h>  // Biblioteca padrão (para system("pause"))
+
+
+// --- DEFINIÇÃO DA ESTRUTURA ---
+// Estrutura que representa um vetor tridimensional (x, y, z)
+struct Vetor
+{
+    float x;  // Componente no eixo X
+    float y;  // Componente no eixo Y
+    float z;  // Componente no eixo Z
+};
+
+
+int main()  // Função principal do programa
+{
+    struct Vetor v1, v2, soma;  // Declara 3 variáveis do tipo Vetor: dois vetores de entrada e um de saída
+
+    // --- ENTRADA DE DADOS ---
+
+    printf("=== Soma de dois vetores em R3 ===\n\n");
+
+    printf("Digite as coordenadas do primeiro vetor (x y z): ");
+    scanf("%f %f %f", &v1.x, &v1.y, &v1.z);
+    // Lê três valores de ponto flutuante e armazena nas componentes de v1
+
+    printf("Digite as coordenadas do segundo vetor (x y z): ");
+    scanf("%f %f %f", &v2.x, &v2.y, &v2.z);
+    // Lê três valores de ponto flutuante e armazena nas componentes de v2
+
+
+    // --- PROCESSAMENTO ---
+
+    // A soma de vetores é feita componente a componente:
+    soma.x = v1.x + v2.x;  // Soma das componentes X
+    soma.y = v1.y + v2.y;  // Soma das componentes Y
+    soma.z = v1.z + v2.z;  // Soma das componentes Z
+
+
+    // --- SAÍDA DE RESULTADOS ---
+
+    printf("\n=== Resultado da soma dos vetores ===\n");
+    printf("Vetor 1: (%.2f, %.2f, %.2f)\n", v1.x, v1.y, v1.z);  // Exibe vetor 1
+    printf("Vetor 2: (%.2f, %.2f, %.2f)\n", v2.x, v2.y, v2.z);  // Exibe vetor 2
+    printf("Soma:    (%.2f, %.2f, %.2f)\n", soma.x, soma.y, soma.z);  // Exibe resultado da soma
+
+    system("pause");  // Pausa o programa (apenas no Windows)
+    return 0;         // Indica que o programa terminou corretamente
+}
