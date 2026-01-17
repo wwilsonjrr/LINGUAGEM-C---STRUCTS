@@ -1,0 +1,64 @@
+/*
+7. Faça um programa que converta coordenadas polares para cartesianas:
+
+   ● Crie e leia um ponto em coordenada polar, composto por raio (r) e argumento (a)
+     em radianos.
+
+   ● Crie outro ponto, agora em coordenada cartesiana, composto por x e y, sabendo que:
+         x = r * cos(a)
+         y = r * sin(a)
+
+   No programa principal, leia um ponto em coordenada polar e mostre as coordenadas
+   do ponto gerado no plano cartesiano.
+*/
+
+#include <stdio.h>   // Biblioteca padrão de entrada e saída
+#include <stdlib.h>  // Biblioteca padrão (para system("pause"))
+#include <math.h>    // Biblioteca matemática (para funções cos() e sin())
+
+
+// --- DEFINIÇÃO DAS ESTRUTURAS ---
+// Estrutura que representa um ponto em coordenadas polares
+struct Polar
+{
+    float r;  // Raio (distância da origem)
+    float a;  // Ângulo (em radianos)
+};
+
+// Estrutura que representa um ponto em coordenadas cartesianas
+struct Cartesiana
+{
+    float x;  // Coordenada no eixo X
+    float y;  // Coordenada no eixo Y
+};
+
+
+int main()  // Função principal do programa
+{
+    struct Polar p;         // Declara um ponto em coordenadas polares
+    struct Cartesiana c;    // Declara um ponto em coordenadas cartesianas
+
+    // --- ENTRADA DE DADOS ---
+    printf("=== Conversao de Coordenadas Polares para Cartesianas ===\n\n");
+
+    printf("Digite o valor do raio (r): ");
+    scanf("%f", &p.r);  // Lê o valor do raio
+
+    printf("Digite o valor do angulo (a) em radianos: ");
+    scanf("%f", &p.a);  // Lê o valor do ângulo (em radianos)
+
+    // --- PROCESSAMENTO ---
+    // Fórmulas de conversão:
+    // x = r * cos(a)
+    // y = r * sin(a)
+    c.x = p.r * cos(p.a);  // Calcula a coordenada x
+    c.y = p.r * sin(p.a);  // Calcula a coordenada y
+
+    // --- SAÍDA DE RESULTADOS ---
+    printf("\n=== Resultado no plano cartesiano ===\n");
+    printf("Coordenadas polares: r = %.2f, a = %.2f rad\n", p.r, p.a);
+    printf("Coordenadas cartesianas: x = %.2f, y = %.2f\n", c.x, c.y);
+
+    system("pause");  // Pausa o programa (somente no Windows)
+    return 0;         // Indica término bem-sucedido do programa
+}
