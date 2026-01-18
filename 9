@@ -1,0 +1,79 @@
+/*
+9. Faça um programa que faça operações simples de números complexos:
+
+   ● Crie e leia dois números complexos z e w, compostos por parte real e parte imaginária.
+   ● Apresente a soma, subtração e produto entre z e w, nessa ordem, bem como o módulo de ambos.
+*/
+
+#include <stdio.h>   // Biblioteca padrão de entrada e saída (printf, scanf)
+#include <stdlib.h>  // Biblioteca padrão (para system("pause"))
+#include <math.h>    // Biblioteca matemática (para funções como sqrt())
+
+// --- DEFINIÇÃO DA ESTRUTURA ---
+// Estrutura que representa um número complexo: z = a + bi
+struct Complexo
+{
+    float real;  // Parte real do número complexo
+    float imag;  // Parte imaginária do número complexo
+};
+
+
+int main()
+{
+    struct Complexo z, w;         // Declara dois números complexos: z e w
+    struct Complexo soma, sub, prod;  // Estruturas para armazenar resultados
+    float mod_z, mod_w;           // Variáveis para os módulos (valores absolutos)
+
+    // --- ENTRADA DE DADOS ---
+    printf("=== Operacoes com Numeros Complexos ===\n\n");
+
+    // Leitura do primeiro número complexo (z)
+    printf("Digite a parte real de z: ");
+    scanf("%f", &z.real);  // Lê a parte real de z
+
+    printf("Digite a parte imaginaria de z: ");
+    scanf("%f", &z.imag);  // Lê a parte imaginária de z
+
+    // Leitura do segundo número complexo (w)
+    printf("\nDigite a parte real de w: ");
+    scanf("%f", &w.real);  // Lê a parte real de w
+
+    printf("Digite a parte imaginaria de w: ");
+    scanf("%f", &w.imag);  // Lê a parte imaginária de w
+
+
+    // --- PROCESSAMENTO ---
+
+    // Soma: (a + bi) + (c + di) = (a + c) + (b + d)i
+    soma.real = z.real + w.real;   // Soma das partes reais
+    soma.imag = z.imag + w.imag;   // Soma das partes imaginárias
+
+    // Subtração: (a + bi) - (c + di) = (a - c) + (b - d)i
+    sub.real = z.real - w.real;    // Diferença das partes reais
+    sub.imag = z.imag - w.imag;    // Diferença das partes imaginárias
+
+    // Produto: (a + bi)(c + di) = (ac - bd) + (ad + bc)i
+    prod.real = (z.real * w.real) - (z.imag * w.imag);  // Calcula a parte real do produto
+    prod.imag = (z.real * w.imag) + (z.imag * w.real);  // Calcula a parte imaginária do produto
+
+    // Módulo: |z| = sqrt(a² + b²)
+    mod_z = sqrt(pow(z.real, 2) + pow(z.imag, 2));  // Módulo de z
+    mod_w = sqrt(pow(w.real, 2) + pow(w.imag, 2));  // Módulo de w
+
+
+    // --- SAÍDA DE RESULTADOS ---
+    printf("\n=== Resultados ===\n");
+
+    printf("z = %.2f + %.2fi\n", z.real, z.imag);  // Exibe o número z
+    printf("w = %.2f + %.2fi\n\n", w.real, w.imag);  // Exibe o número w
+
+    printf("Soma (z + w) = %.2f + %.2fi\n", soma.real, soma.imag);       // Exibe a soma
+    printf("Subtracao (z - w) = %.2f + %.2fi\n", sub.real, sub.imag);    // Exibe a subtração
+    printf("Produto (z * w) = %.2f + %.2fi\n", prod.real, prod.imag);    // Exibe o produto
+
+    printf("\nModulo de z = %.2f\n", mod_z);  // Exibe o módulo de z
+    printf("Modulo de w = %.2f\n", mod_w);    // Exibe o módulo de w
+
+    system("pause");  // Pausa a execução (somente no Windows)
+    return 0;         // Encerra o programa com sucesso
+}
