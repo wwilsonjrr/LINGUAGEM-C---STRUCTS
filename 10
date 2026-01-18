@@ -1,0 +1,132 @@
+/*
+10. Utilizando uma estrutura, faça um programa que permita a entrada de
+nome, endereço e telefone de 5 pessoas e os imprima em ordem alfabética.
+
+loop i (para ver quem é o menor)
+
+i = 0 → compara com (1, 2, 3, 4)
+i = 1 → compara com (2, 3, 4)
+i = 2 → compara com (3, 4)
+i = 3 → compara com (4)
+
+
+loop j (para ver quem é o menor)
+
+Quando i = 0:
+    j = 1 → compara 0 com 1
+    j = 2 → compara 0 com 2
+    j = 3 → compara 0 com 3
+    j = 4 → compara 0 com 4
+
+Quando i = 1:
+    j = 2 → compara 1 com 2
+    j = 3 → compara 1 com 3
+    j = 4 → compara 1 com 4
+
+Quando i = 2:
+    j = 3 → compara 2 com 3
+    j = 4 → compara 2 com 4
+
+Quando i = 3:
+    j = 4 → compara 3 com 4
+
+
+
+O que o strcmp retorna?
+Retorno	    Significado
+0	        As duas strings são iguais
+< 0	        string1 vem antes de string2 (ordem alfabética)
+> 0	        string1 vem depois de string2
+
+
+
+*/
+
+#include <stdio.h>   // Inclui funções de entrada e saída (printf, scanf, fgets)
+#include <stdlib.h>  // Inclui funções do sistema, como system("pause")
+#include <string.h>  // Inclui funções de manipulação de strings (strcmp, strcpy)
+
+
+// Define uma estrutura chamada "Pessoa"
+struct Pessoa
+{
+    char nome[50];       // Campo para armazenar o nome da pessoa
+    char endereco[100];  // Campo para armazenar o endereço completo
+    char telefone[20];   // Campo para armazenar o telefone
+};
+
+
+int main()  // Função principal do programa
+{
+    struct Pessoa p[5];   // Declara um vetor de 5 elementos do tipo Pessoa
+    struct Pessoa temp;   // Estrutura auxiliar usada para trocar posições na ordenação
+    int i, j;             // Variáveis de controle para os loops
+
+    // --- ENTRADA DE DADOS ---
+    printf("=== Cadastro de 5 Pessoas ===\n\n");  // Mensagem inicial do programa
+
+    // Loop para ler os dados das 5 pessoas
+    for(i = 0; i < 5; i++)
+    {
+        printf("Pessoa %d:\n", i + 1);  // Indica qual pessoa está sendo cadastrada
+
+        // Leitura do nome
+        printf("Nome: ");
+        fgets(p[i].nome, sizeof(p[i].nome), stdin);  // Lê a string com espaços e armazena em p[i].nome
+
+        // Remove o caractere '\n' adicionado pelo fgets no final da string
+        p[i].nome[strcspn(p[i].nome, "\n")] = '\0';
+
+        // Leitura do endereço
+        printf("Endereco: ");
+        fgets(p[i].endereco, sizeof(p[i].endereco), stdin);  // Lê o endereço completo
+
+        // Remove o '\n' do final do endereço
+        p[i].endereco[strcspn(p[i].endereco, "\n")] = '\0';
+
+        // Leitura do telefone
+        printf("Telefone: ");
+        fgets(p[i].telefone, sizeof(p[i].telefone), stdin);  // Lê o telefone (pode conter hífen ou espaços)
+
+        // Remove o '\n' deixado pelo fgets
+        p[i].telefone[strcspn(p[i].telefone, "\n")] = '\0';
+
+        printf("\n");  // Pula uma linha para melhor visualização
+    }
+
+    // --- PROCESSAMENTO: ORDENAÇÃO DOS NOMES ---
+    // O objetivo é ordenar as pessoas alfabeticamente com base no nome.
+    // Aqui é usado o método de ordenação "Bubble Sort" adaptado para structs.
+
+    for(i = 0; i < 5 - 1; i++)           // Loop externo (varre o vetor até o penúltimo elemento)
+    {
+        for(j = i + 1; j < 5; j++)       // Loop interno (compara o elemento atual com os seguintes)
+        {
+            // strcmp() compara duas strings:
+            // Retorna >0 se p[i].nome vem DEPOIS de p[j].nome em ordem alfabética.
+            // Retorna <0 se p[i].nome vem ANTES de p[j].nome.
+            if(strcmp(p[i].nome, p[j].nome) > 0)
+            {
+                // Se o nome atual (p[i]) vier depois de p[j], faz a troca de posição.
+
+                temp = p[i];  // Armazena temporariamente o valor de p[i]
+                p[i] = p[j];  // Move p[j] para a posição p[i]
+                p[j] = temp;  // Coloca o valor temporário (antigo p[i]) na posição p[j]
+            }
+        }
+    }
+
+    // --- SAÍDA DE DADOS ---
+    printf("=== Lista de Pessoas em Ordem Alfabetica ===\n\n");
+
+    // Loop para exibir os dados das pessoas já ordenadas
+    for(i = 0; i < 5; i++)
+    {
+        printf("Nome: %s\n", p[i].nome);           // Exibe o nome da pessoa
+        printf("Endereco: %s\n", p[i].endereco);   // Exibe o endereço
+        printf("Telefone: %s\n\n", p[i].telefone); // Exibe o telefone
+    }
+
+    system("pause");  // Pausa o programa (apenas no Windows)
+    return 0;         // Encerra o programa com sucesso
+}
