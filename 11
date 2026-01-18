@@ -1,0 +1,97 @@
+/*
+11. Faça um programa que leia os dados de 10 alunos (Nome, Matrícula, Média Final),
+armazenando em um vetor. Uma vez lidos os dados, divida estes dados em dois novos
+vetores: o vetor dos aprovados e o vetor dos reprovados, considerando a média mínima
+para aprovação como sendo 5.0. Exibir na tela os dados do vetor de aprovados, seguido
+dos dados do vetor de reprovados.
+*/
+
+#include <stdio.h>   // Biblioteca padrão de entrada e saída (printf, scanf, fgets)
+#include <stdlib.h>  // Biblioteca padrão (para system("pause"))
+#include <string.h>  // Biblioteca para manipulação de strings (fgets)
+
+
+// --- DEFINIÇÃO DA ESTRUTURA ---
+// Estrutura que armazena os dados de um aluno
+struct Aluno
+{
+    char nome[50];       // Nome completo do aluno
+    int matricula;       // Número de matrícula
+    float mediaFinal;    // Média final do aluno
+};
+
+
+int main()
+{
+    struct Aluno alunos[10];        // Vetor com os 10 alunos
+    struct Aluno aprovados[10];     // Vetor para armazenar apenas os aprovados
+    struct Aluno reprovados[10];    // Vetor para armazenar apenas os reprovados
+    int i;                          // Contador principal do loop
+    int contAprov = 0, contReprov = 0;  // Contadores de aprovados e reprovados
+
+    // --- ENTRADA DE DADOS ---
+    printf("=== Cadastro de 10 Alunos ===\n\n");
+
+    for(i = 0; i < 10; i++)  // Loop para ler os dados dos 10 alunos
+    {
+        printf("Aluno %d:\n", i + 1);
+
+        // Lê o nome do aluno (usa fgets para permitir espaços)
+        printf("Nome: ");
+        fgets(alunos[i].nome, sizeof(alunos[i].nome), stdin);
+
+        // Remove o caractere '\n' inserido pelo fgets
+        alunos[i].nome[strcspn(alunos[i].nome, "\n")] = '\0';
+
+        // Lê o número de matrícula
+        printf("Matricula: ");
+        scanf("%d", &alunos[i].matricula);
+
+        // Lê a média final
+        printf("Media final: ");
+        scanf("%f", &alunos[i].mediaFinal);
+
+        getchar();  // Limpa o buffer antes da próxima leitura de string
+        printf("\n");  // Linha em branco para separar cada aluno
+    }
+
+    // --- PROCESSAMENTO ---
+    // Separa os alunos em aprovados e reprovados com base na média final
+    for(i = 0; i < 10; i++)
+    {
+        if(alunos[i].mediaFinal >= 5.0)  // Condição de aprovação
+        {
+            aprovados[contAprov] = alunos[i];  // Copia os dados para o vetor de aprovados
+            contAprov++;                       // Incrementa contador de aprovados
+        }
+        else
+        {
+            reprovados[contReprov] = alunos[i];  // Copia os dados para o vetor de reprovados
+            contReprov++;                        // Incrementa contador de reprovados
+        }
+    }
+
+    // --- SAÍDA DE DADOS ---
+    printf("=== Alunos Aprovados ===\n\n");
+
+    // Exibe os dados de todos os aprovados
+    for(i = 0; i < contAprov; i++)
+    {
+        printf("Nome: %s\n", aprovados[i].nome);
+        printf("Matricula: %d\n", aprovados[i].matricula);
+        printf("Media Final: %.2f\n\n", aprovados[i].mediaFinal);
+    }
+
+    printf("=== Alunos Reprovados ===\n\n");
+
+    // Exibe os dados de todos os reprovados
+    for(i = 0; i < contReprov; i++)
+    {
+        printf("Nome: %s\n", reprovados[i].nome);
+        printf("Matricula: %d\n", reprovados[i].matricula);
+        printf("Media Final: %.2f\n\n", reprovados[i].mediaFinal);
+    }
+
+    system("pause");  // Pausa o programa (somente no Windows)
+    return 0;         // Encerra o programa com sucesso
+}
