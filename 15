@@ -1,0 +1,83 @@
+/*
+15. Faça um programa que leia um vetor com dados de 5 livros:
+título (máximo 30 letras), autor (máximo 15 letras) e ano.
+Procure um livro por título, perguntando ao usuário qual título deseja buscar.
+Mostre os dados de todos os livros encontrados.
+*/
+
+#include <stdio.h>    // Biblioteca padrão de entrada e saída (printf, scanf)
+#include <stdlib.h>   // Biblioteca padrão (usada aqui para system("pause"))
+#include <string.h>   // Biblioteca para manipulação de strings (strcmp, fgets, etc.)
+
+// --- DEFINIÇÃO DA ESTRUTURA ---
+struct Livro            // Cria uma estrutura chamada "Livro"
+{
+    char titulo[31];    // Campo para armazenar o título do livro (30 letras + '\0')
+    char autor[16];     // Campo para armazenar o nome do autor (15 letras + '\0')
+    int ano;            // Campo para armazenar o ano de publicação do livro
+};
+
+int main()              // Função principal do programa
+{
+    struct Livro livros[5];   // Cria um vetor de 5 elementos do tipo "Livro"
+    int i;                    // Variável de controle para o laço "for"
+    char busca[31];           // Variável para armazenar o título que o usuário vai buscar
+    int encontrado;           // Variável para indicar se o livro foi encontrado (flag)
+
+    printf("=== Cadastro de 5 Livros ===\n\n");   // Exibe o título do programa
+
+    // --- ENTRADA DE DADOS ---
+    for(i = 0; i < 5; i++)    // Loop que se repete 5 vezes para cadastrar os livros
+    {
+        printf("Livro %d:\n", i + 1);  // Indica qual livro está sendo cadastrado (1 a 5)
+
+        // Lê o título do livro
+        printf("Titulo: ");                         // Solicita o título
+        fgets(livros[i].titulo, sizeof(livros[i].titulo), stdin);  // Lê uma string (com espaços)
+        livros[i].titulo[strcspn(livros[i].titulo, "\n")] = '\0';  // Remove o '\n' deixado pelo fgets
+
+        // Lê o nome do autor
+        printf("Autor: ");                          // Solicita o nome do autor
+        fgets(livros[i].autor, sizeof(livros[i].autor), stdin);    // Lê o nome do autor (com espaços)
+        livros[i].autor[strcspn(livros[i].autor, "\n")] = '\0';    // Remove o '\n' final da string
+
+        // Lê o ano de publicação
+        printf("Ano: ");                            // Solicita o ano de publicação
+        scanf("%d", &livros[i].ano);                // Lê o valor inteiro e armazena no campo "ano"
+        getchar();                                  // Remove o ENTER deixado no buffer do teclado
+
+        printf("\n");                               // Pula uma linha para melhorar a aparência
+    }
+
+    // --- BUSCA POR TÍTULO ---
+    printf("Digite o titulo do livro que deseja buscar: "); // Solicita o título para busca
+    fgets(busca, sizeof(busca), stdin);                     // Lê o título digitado pelo usuário
+    busca[strcspn(busca, "\n")] = '\0';                     // Remove o '\n' final da string
+
+    encontrado = 0;  // Inicializa a variável como 0 (nenhum livro encontrado ainda)
+
+    printf("\n=== Resultados da busca ===\n");  // Exibe o cabeçalho da seção de resultados
+
+    for(i = 0; i < 5; i++)                      // Percorre os 5 livros cadastrados
+    {
+        // Compara o título digitado com o título de cada livro
+        if(strcmp(livros[i].titulo, busca) == 0)   // strcmp retorna 0 se as strings forem iguais
+        {
+            printf("\nLivro encontrado!\n");       // Indica que o livro foi encontrado
+            printf("Titulo: %s\n", livros[i].titulo); // Exibe o título do livro
+            printf("Autor: %s\n", livros[i].autor);   // Exibe o nome do autor
+            printf("Ano: %d\n", livros[i].ano);       // Exibe o ano de publicação
+            encontrado = 1;                           // Marca que encontrou pelo menos um livro
+        }
+    }
+
+    // Se nenhum livro foi encontrado, exibe uma mensagem de aviso
+    // \" → imprime "
+    // %s → será substituído pelo conteúdo de busca
+    // \n → quebra de linha
+    if(!encontrado)
+        printf("Nenhum livro com o titulo \"%s\" foi encontrado.\n", busca);
+
+    system("pause");  // Mantém o terminal aberto até o usuário pressionar uma tecla (somente no Windows)
+    return 0;         // Encerra o programa
+}
