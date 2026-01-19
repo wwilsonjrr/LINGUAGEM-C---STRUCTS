@@ -1,0 +1,113 @@
+/*
+16. Faça um programa que seja uma agenda de compromissos e:
+- Crie e leia um vetor de 5 estruturas de dados com: compromisso (máximo 60 letras) e data.
+  A data deve ser outra estrutura de dados contendo dia, mês e ano.
+- Leia dois inteiros M e A e mostre todos os compromissos do mês M do ano A.
+  Repita o procedimento até ler M = 0.
+*/
+
+#include <stdio.h>    // Biblioteca padrão de entrada e saída (printf, scanf)
+#include <stdlib.h>   // Biblioteca padrão (para system("pause"))
+#include <string.h>   // Biblioteca para manipular strings (fgets, strcspn)
+
+// --- DEFINIÇÃO DAS ESTRUTURAS ---
+
+// Estrutura para armazenar uma data
+struct Data
+{
+    int dia;   // Dia do compromisso
+    int mes;   // Mês do compromisso
+    int ano;   // Ano do compromisso
+};
+
+// Estrutura que combina o texto do compromisso e uma data
+struct Compromisso
+{
+    char texto[61];       // Descrição do compromisso (até 60 caracteres + '\0')
+    struct Data data;     // Data associada ao compromisso (struct dentro de struct)
+};
+
+int main()
+{
+    struct Compromisso agenda[5];  // Vetor com 5 compromissos
+    int i;                         // Variável de controle do laço
+    int mesBusca, anoBusca;        // Variáveis para pesquisa
+    int encontrou;                 // Indicador se há compromissos no mês/ano
+
+    printf("=== Cadastro de 5 compromissos ===\n\n");
+
+    // --- ENTRADA DE DADOS ---
+    for(i = 0; i < 5; i++)  // Loop para preencher os 5 compromissos
+    {
+        printf("Compromisso %d:\n", i + 1);
+
+        // Lê o texto do compromisso
+        printf("Descricao: ");
+        fgets(agenda[i].texto, sizeof(agenda[i].texto), stdin);
+        agenda[i].texto[strcspn(agenda[i].texto, "\n")] = '\0';  // Remove o '\n' do final da string
+
+        // Lê o dia
+        printf("Dia: ");
+        scanf("%d", &agenda[i].data.dia);
+
+        // Lê o mês
+        printf("Mes: ");
+        scanf("%d", &agenda[i].data.mes);
+
+        // Lê o ano
+        printf("Ano: ");
+        scanf("%d", &agenda[i].data.ano);
+
+        getchar();  // Limpa o ENTER deixado no buffer pelo scanf
+        printf("\n");
+    }
+
+    // --- PESQUISA POR MÊS E ANO ---
+    do
+    {
+        printf("Digite o mes e o ano para buscar compromissos (M A), ou 0 para sair: ");
+        scanf("%d", &mesBusca);
+
+        if(mesBusca == 0)  // Condição de parada: mês igual a 0 encerra o programa
+        {
+            printf("\nEncerrando o programa...\n");
+            break;
+        }
+
+        scanf("%d", &anoBusca);  // Lê o ano desejado
+
+        printf("\n=== Compromissos de %02d/%d ===\n", mesBusca, anoBusca);
+
+        encontrou = 0;  // Inicializa como falso (nenhum compromisso encontrado ainda)
+
+        for(i = 0; i < 5; i++)  // Percorre todos os compromissos cadastrados
+        {
+            if(agenda[i].data.mes == mesBusca && agenda[i].data.ano == anoBusca)
+            {
+                // Exibe o compromisso se o mês e o ano coincidirem
+                printf("\nData: %02d/%02d/%d\n", agenda[i].data.dia, agenda[i].data.mes, agenda[i].data.ano);
+                printf("Descricao: %s\n", agenda[i].texto);
+                encontrou = 1;  // Marca que encontrou pelo menos um compromisso
+            }
+        }
+
+        //Significa:
+
+        // %d → número inteiro
+
+        // 2 → largura mínima de 2 caracteres
+
+        // 0 → preencher com zero à esquerda, se faltar dígito
+
+        if(!encontrou)  // Se nenhum compromisso foi encontrado
+        {
+            printf("Nenhum compromisso encontrado para %02d/%d.\n", mesBusca, anoBusca);
+        }
+
+        printf("\n");
+
+    } while(mesBusca != 0);  // Repete até que o usuário digite M = 0
+
+    system("pause");  // Pausa o programa (Windows)
+    return 0;         // Finaliza o programa com sucesso
+}
