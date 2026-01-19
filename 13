@@ -1,0 +1,167 @@
+/*
+13. Peça ao usuário para digitar seus dados pessoais (Nome, Endereço, Data de Nascimento,
+Cidade, CEP, email), verifique se as informações de Data de Nascimento, CEP e email fazem sentido,
+e mostre ao usuário as informações, se estão todas corretas, ou mostre que alguma informação estava errada.
+
+
+strlen serve para contar quantos caracteres uma string possui, sem contar o '\0'
+
+strchr procura um caractere em uma string
+
+strcspn remover o '\n"
+
+*/
+
+#include <stdio.h>    // printf, scanf, fgets
+#include <stdlib.h>   // system("pause")
+#include <string.h>   // strlen, strchr, strcspn
+
+// --- DEFINIÇÃO DA ESTRUTURA ---
+struct Pessoa
+{
+    char nome[50];        // Armazena o nome da pessoa
+    char endereco[100];   // Armazena o endereço
+    int dia, mes, ano;    // Armazena a data de nascimento
+    char cidade[50];      // Armazena a cidade
+    char cep[10];         // Armazena o CEP
+    char email[50];       // Armazena o email
+};
+
+int main()
+{
+    struct Pessoa p;  // Cria uma variável do tipo Pessoa
+
+    // Exibe título do programa
+    printf("=== Cadastro de Dados Pessoais ===\n\n");
+
+    // -------- LEITURA DOS DADOS --------
+
+    // Solicita o nome
+    printf("Nome: ");
+    fgets(p.nome, sizeof(p.nome), stdin);            // Lê o nome
+    p.nome[strcspn(p.nome, "\n")] = '\0';             // Remove o '\n'
+
+    // Solicita o endereço
+    printf("Endereco: ");
+    fgets(p.endereco, sizeof(p.endereco), stdin);     // Lê o endereço
+    p.endereco[strcspn(p.endereco, "\n")] = '\0';     // Remove o '\n'
+
+    // Solicita a data de nascimento
+    printf("Data de nascimento (dd mm aaaa): ");
+    scanf("%d %d %d", &p.dia, &p.mes, &p.ano);         // Lê dia, mês e ano
+    getchar();                                         // Limpa o buffer
+
+    // Solicita a cidade
+    printf("Cidade: ");
+    fgets(p.cidade, sizeof(p.cidade), stdin);         // Lê a cidade
+    p.cidade[strcspn(p.cidade, "\n")] = '\0';         // Remove o '\n'
+
+    // Solicita o CEP
+    printf("CEP: ");
+    fgets(p.cep, sizeof(p.cep), stdin);               // Lê o CEP
+    p.cep[strcspn(p.cep, "\n")] = '\0';               // Remove o '\n'
+
+    // Solicita o email
+    printf("Email: ");
+    fgets(p.email, sizeof(p.email), stdin);           // Lê o email
+    p.email[strcspn(p.email, "\n")] = '\0';           // Remove o '\n'
+
+    // -------- VALIDAÇÃO DOS DADOS --------
+
+    printf("\n=== Verificacao dos Dados ===\n\n");
+
+    int dataOk = 1;    // Assume que a data é válida
+    int cepOk = 1;     // Assume que o CEP é válido
+    int emailOk = 1;   // Assume que o email é válido
+
+    // ---- VALIDAÇÃO DA DATA ----
+
+    if (p.ano < 1900 || p.ano > 2026)   // Verifica intervalo do ano
+        dataOk = 0;
+
+    if (p.mes < 1 || p.mes > 12)        // Verifica mês válido
+        dataOk = 0;
+
+    if (p.dia < 1 || p.dia > 31)        // Verifica dia válido geral
+        dataOk = 0;
+
+    // Verifica meses que têm apenas 30 dias
+    if (dataOk)
+    {
+        if ((p.mes == 4 || p.mes == 6 || p.mes == 9 || p.mes == 11) && p.dia > 30)
+            dataOk = 0;
+    }
+
+    // Verifica fevereiro
+    if (dataOk && p.mes == 2)
+    {
+        int bissexto;   // Variável para indicar ano bissexto
+
+        // Calcula se o ano é bissexto
+        bissexto = (p.ano % 4 == 0 && (p.ano % 100 != 0 || p.ano % 400 == 0));
+
+        // Verifica se o dia excede o limite de fevereiro
+        if (p.dia > 28 + bissexto) // Se for bissexto = 1, se não for bissexto = 0)
+            dataOk = 0;
+    }
+
+    // ---- VALIDAÇÃO DO CEP ----
+
+    int tamCep = strlen(p.cep);   // Calcula o tamanho do CEP
+
+    if (tamCep != 8 && tamCep != 9)   // CEP deve ter 8 (00000000) ou 9 caracteres (00000-000)
+    {
+        cepOk = 0;
+    }
+    else
+    {
+        for (int i = 0; i < tamCep; i++)   // Percorre o CEP caractere por caractere
+        {
+            if (i == 5 && p.cep[i] == '-') // Ignora o hífen na posição 5 (00000-000)
+                continue;
+
+            if (p.cep[i] < '0' || p.cep[i] > '9') // Verifica se é dígito
+            {
+                cepOk = 0;   // CEP inválido
+                break;       // Sai do laço
+            }
+        }
+    }
+
+    // ---- VALIDAÇÃO DO EMAIL ----
+
+    if (strchr(p.email, '@') == NULL)  // Verifica se existe '@'  // Se o e-mail não contiver o caractere @, ele é considerado inválido.
+        emailOk = 0;
+
+    if (strchr(p.email, '.') == NULL)  // Verifica se existe '.'  // Se o e-mail não contiver o caractere ., ele é considerado inválido.
+        emailOk = 0;
+
+    // -------- RESULTADO FINAL --------
+
+    if (dataOk && cepOk && emailOk)  // Se todos os dados forem válidos
+    {
+        printf("Todos os dados sao validos!\n\n");
+        printf("Nome: %s\n", p.nome);
+        printf("Endereco: %s\n", p.endereco);
+        printf("Data de Nascimento: %02d/%02d/%04d\n", p.dia, p.mes, p.ano);
+        printf("Cidade: %s\n", p.cidade);
+        printf("CEP: %s\n", p.cep);
+        printf("Email: %s\n", p.email);
+    }
+    else   // Caso algum dado esteja errado
+    {
+        printf("Algum dado inserido esta incorreto:\n");
+
+        if (!dataOk)   // Se a data for inválida
+            printf("- Data de nascimento invalida.\n");
+
+        if (!cepOk)    // Se o CEP for inválido
+            printf("- CEP invalido.\n");
+
+        if (!emailOk)  // Se o email for inválido
+            printf("- Email invalido.\n");
+    }
+
+    system("pause");  // Pausa o programa no Windows
+    return 0;         // Finaliza o programa
+}
