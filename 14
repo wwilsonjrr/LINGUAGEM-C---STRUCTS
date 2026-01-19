@@ -1,0 +1,86 @@
+/*
+14. Faça um programa que leia um vetor com os dados de 5 carros:
+marca (máximo 15 letras), ano e preço.
+Leia um valor p e mostre as informações de todos os carros com preço menor que p.
+Repita este processo até que seja lido um valor p = 0.
+*/
+
+#include <stdio.h>    // Biblioteca padrão de entrada e saída (printf, scanf)
+#include <stdlib.h>   // Biblioteca padrão (para system("pause"))
+#include <string.h>   // Biblioteca para manipular strings (fgets, strlen)
+
+
+// --- DEFINIÇÃO DA ESTRUTURA ---
+struct Carro
+{
+    char marca[16];   // Marca do carro (máx. 15 letras + '\0')
+    int ano;          // Ano do carro
+    float preco;      // Preço do carro
+};
+
+
+int main()
+{
+    struct Carro carros[5];   // Vetor para armazenar os 5 carros
+    int i;                    // Variável de controle para loops
+    float p;                  // Valor de comparação de preço
+
+    // --- ENTRADA DE DADOS ---
+    printf("=== Cadastro de 5 carros ===\n\n");
+
+    for(i = 0; i < 5; i++)  // Loop para preencher o vetor com 5 carros
+    {
+        printf("Carro %d:\n", i + 1);
+
+        // Lê a marca do carro
+        printf("Marca: ");
+        fgets(carros[i].marca, sizeof(carros[i].marca), stdin);
+        carros[i].marca[strcspn(carros[i].marca, "\n")] = '\0';  // Remove o '\n' deixado pelo fgets
+
+        // Lê o ano do carro
+        printf("Ano: ");
+        scanf("%d", &carros[i].ano);
+
+        // Lê o preço do carro
+        printf("Preco: ");
+        scanf("%f", &carros[i].preco);
+
+        getchar();  // Limpa o buffer do teclado
+        printf("\n");
+    }
+
+    // --- PROCESSAMENTO E CONSULTA ---
+    do
+    {
+        printf("Digite um valor limite de preco (ou 0 para sair): ");
+        scanf("%f", &p);
+
+        if(p == 0)  // Condição de parada do programa
+        {
+            printf("\nEncerrando o programa...\n");
+            break;
+        }
+
+        printf("\n=== Carros com preco menor que %.2f ===\n", p);
+        int encontrou = 0;  // Variável auxiliar para verificar se houve resultados
+
+        for(i = 0; i < 5; i++)  // Percorre o vetor de carros
+        {
+            if(carros[i].preco < p)  // Verifica se o preço do carro é menor que p
+            {
+                printf("Marca: %s\n", carros[i].marca);
+                printf("Ano: %d\n", carros[i].ano);
+                printf("Preco: R$ %.2f\n\n", carros[i].preco);
+                encontrou = 1;  // Marca que encontrou pelo menos um carro
+            }
+        }
+
+        if(!encontrou)  // Caso nenhum carro tenha preço menor que p
+            printf("Nenhum carro encontrado com preco abaixo de %.2f\n\n", p);
+
+            
+    } while(p != 0);  // Repete até que o usuário digite p = 0
+
+    system("pause");  // Pausa o programa (Windows)
+    return 0;         // Encerra o programa
+}
