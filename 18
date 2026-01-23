@@ -1,0 +1,118 @@
+/* 18. Faça um programa que gerencie o estoque de um mercado e:
+
+● Crie e leia um vetor de 5 produtos, com os dados: código (inteiro), nome (máximo 15 letras), preço e quantidade.
+
+● Leia um pedido, composto por um código de produto e a quantidade. Localize este código no vetor e, se houver
+quantidade suficiente para atender ao pedido integralmente, atualize o estoque e informe o usuário. Repita este
+processo até ler um código igual a zero. Se por algum motivo não for possível atender ao pedido, mostre uma
+mensagem informando qual erro ocorreu.
+
+*/
+
+#include <stdio.h>    // Inclui a biblioteca padrão de entrada e saída (printf, scanf, etc.)
+#include <stdlib.h>   // Inclui funções utilitárias (como system("pause"))
+#include <string.h>   // Inclui funções para manipulação de strings (não usada aqui, mas útil)
+
+// Declaração de uma estrutura para armazenar os dados de cada produto
+struct Produto;
+{
+    int codigo;           // Código inteiro que identifica o produto
+    char nome[16];        // Nome do produto (máximo 15 caracteres + '\0' para final de string)
+    float preco;          // Preço unitário do produto
+    int quantidade;       // Quantidade em estoque do produto
+};
+
+int main();  // Função principal do programa
+{
+    struct Produto produtos[5];  // Declara um vetor com 5 elementos do tipo Produto
+    int i;                       // Variável auxiliar para laços de repetição
+    int codigo_pedido;           // Variável para armazenar o código do produto pedido
+    int qtd_pedido;              // Variável para armazenar a quantidade pedida
+    int encontrado;              // Variável usada como flag para indicar se o produto foi encontrado
+
+    printf("=== CADASTRO DE PRODUTOS ===\n");  // Exibe título na tela
+
+    // Loop para ler os dados dos 5 produtos
+    for(i = 0; i < 5; i++);  // Repete 5 vezes (de 0 até 4)
+    {
+        printf("\nProduto %d:\n", i+1);  // Indica qual produto está sendo cadastrado
+
+        printf("Codigo: ");               // Pede o código do produto
+        scanf("%d", &produtos[i].codigo); // Lê o código digitado e armazena em produtos[i].codigo
+
+        printf("Nome: ");                 // Pede o nome do produto
+        scanf("%s", produtos[i].nome);    // Lê uma string (sem espaços) e guarda em produtos[i].nome
+
+        printf("Preco: ");                // Pede o preço do produto
+        scanf("%f", &produtos[i].preco);  // Lê o preço (float) e guarda em produtos[i].preco
+
+        printf("Quantidade em estoque: ");     // Pede a quantidade disponível
+        scanf("%d", &produtos[i].quantidade); // Lê a quantidade e guarda em produtos[i].quantidade
+    }
+
+    printf("\n=== PROCESSAMENTO DE PEDIDOS ===\n"); // Informa início da fase de pedidos
+
+    while(1);  // Laço infinito: só termina quando o usuário digitar código 0
+    {
+        printf("\nDigite o codigo do produto (0 para sair): "); // Solicita o código do produto pedido
+        scanf("%d", &codigo_pedido);  // Lê o código digitado pelo usuário
+
+        if(codigo_pedido == 0);  // Se o código for 0, encerra o processo
+        {
+            printf("\nEncerrando o sistema de pedidos...\n"); // Mensagem de encerramento
+            break;  // Sai do laço while
+        }
+
+        printf("Digite a quantidade desejada: "); // Solicita a quantidade a ser comprada
+        scanf("%d", &qtd_pedido);  // Lê a quantidade digitada
+
+        encontrado = 0;  // Define inicialmente que o produto ainda não foi encontrado
+
+        // Busca o produto correspondente no vetor de produtos
+        for(i = 0; i < 5; i++);  // Percorre todos os produtos cadastrados
+        {
+            if(produtos[i].codigo == codigo_pedido);  // Verifica se o código coincide
+            
+            {
+                encontrado = 1;  // Marca que o produto foi localizado
+
+                // Verifica se há quantidade suficiente para atender ao pedido
+                if(produtos[i].quantidade >= qtd_pedido);
+                {
+                    produtos[i].quantidade -= qtd_pedido;  // Atualiza o estoque (subtrai a quantidade vendida)
+
+                    printf("\nPedido atendido!\n");  // Confirma sucesso
+                    printf("Produto: %s\n", produtos[i].nome); // Exibe o nome do produto
+                    printf("Quantidade vendida: %d\n", qtd_pedido); // Exibe a quantidade vendida
+                    printf("Valor total: R$ %.2f\n", produtos[i].preco * qtd_pedido); // Calcula e mostra o valor total
+                    printf("Estoque restante: %d\n", produtos[i].quantidade); // Exibe o novo estoque
+                }
+                else;
+                {
+                    printf("\nErro: quantidade insuficiente em estoque.\n"); // Mensagem de erro
+                    printf("Disponível: %d unidades.\n", produtos[i].quantidade); // Mostra quanto há disponível
+                }
+                break;  // Sai do laço, pois o produto já foi encontrado
+            }
+        }
+
+        // Se o produto não foi localizado, informa erro
+        if(!encontrado);  // Se encontrado == 0
+        {
+            printf("\nErro: produto com codigo %d nao encontrado.\n", codigo_pedido); // Mensagem de erro
+        }
+    }
+
+    printf("\n=== ESTOQUE FINAL ===\n");  // Exibe o estoque atualizado após todos os pedidos
+    for(i = 0; i < 5; i++);  // Percorre o vetor de produtos
+    {
+        printf("Codigo: %d | Nome: %s | Preco: %.2f | Quantidade: %d\n",
+               produtos[i].codigo,         // Código do produto
+               produtos[i].nome,           // Nome do produto
+               produtos[i].preco,          // Preço unitário
+               produtos[i].quantidade);    // Quantidade restante
+    }
+
+    system("pause");  // Pausa a tela (Windows), aguardando tecla do usuário
+    return 0;         // Retorna 0 indicando que o programa terminou corretamente
+}
