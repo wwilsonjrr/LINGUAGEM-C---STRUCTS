@@ -1,0 +1,104 @@
+/*
+19. Faça um programa que controle o fluxo de voos nos aeroportos de um país.
+Com V = 5 (voos) e A = 5 (aeroportos) e:
+
+● Crie e leia um vetor de voos, sendo que cada voo contém um código de
+  aeroporto de origem e um de destino.
+
+● Crie um vetor de aeroportos, sendo que cada aeroporto contém seu código,
+  quantidade de voos que saem e quantidade de voos que chegam.
+
+Nota: Cada aeroporto é identificado por um código inteiro entre 0 e (A-1).
+      Não aceite aeroportos de código inexistente.
+*/
+
+#include <stdio.h>   // Inclui a biblioteca padrão de entrada e saída (printf, scanf, etc.)
+#include <stdlib.h>  // Inclui funções utilitárias (como system("pause"))
+
+// Define duas constantes para facilitar a alteração posterior
+#define V 5   // Número de voos (constante)
+#define A 5   // Número de aeroportos (constante)
+
+// Estrutura que representa um voo
+struct Voo
+{
+    int origem;   // Armazena o código do aeroporto de origem
+    int destino;  // Armazena o código do aeroporto de destino
+};
+
+// Estrutura que representa um aeroporto
+struct Aeroporto
+{
+    int codigo;         // Código do aeroporto (identificador entre 0 e A-1)
+    int saidas;         // Contador de voos que saem deste aeroporto
+    int chegadas;       // Contador de voos que chegam a este aeroporto
+};
+
+int main()  // Função principal
+{
+    struct Voo voos[V];             // Cria um vetor de 5 elementos do tipo Voo
+    struct Aeroporto aeroportos[A]; // Cria um vetor de 5 elementos do tipo Aeroporto
+    int i;                          // Variável auxiliar para os laços de repetição
+
+    printf("=== CONTROLE DE FLUXO DE VOOS ===\n\n"); // Exibe um título inicial
+
+    // ---------- Inicialização dos aeroportos ----------
+    for(i = 0; i < A; i++)
+    {
+        aeroportos[i].codigo = i;    // Atribui um código de 0 a 4 para cada aeroporto
+        aeroportos[i].saidas = 0;    // Inicializa o número de voos que saem como 0
+        aeroportos[i].chegadas = 0;  // Inicializa o número de voos que chegam como 0
+    }
+
+    // ---------- Leitura dos voos ----------
+    for(i = 0; i < V; i++)
+    {
+        printf("Voo %d:\n", i + 1);  // Exibe o número do voo atual (1 a 5)
+
+        // Leitura do código do aeroporto de origem
+        do
+        {
+            printf("  Codigo do aeroporto de origem (0 a %d): ", A - 1);
+            scanf("%d", &voos[i].origem);
+
+            if(voos[i].origem < 0 || voos[i].origem >= A)
+            {
+                printf("  Codigo invalido! Tente novamente.\n");
+            }
+
+        } while(voos[i].origem < 0 || voos[i].origem >= A); // o código só sai do laço quando o valor estiver entre 0 e A-1
+
+        // Leitura do código do aeroporto de destino
+        do
+        {
+            printf("  Codigo do aeroporto de destino (0 a %d): ", A - 1);
+            scanf("%d", &voos[i].destino);
+
+            if(voos[i].destino < 0 || voos[i].destino >= A)
+            {
+                printf("  Codigo invalido! Tente novamente.\n");
+            }
+
+        } while(voos[i].destino < 0 || voos[i].destino >= A); // o código só sai do laço quando o valor estiver entre 0 e A-1
+
+        // ---------- Atualização dos contadores ----------
+        aeroportos[voos[i].origem].saidas++;     // Incrementa saídas
+        aeroportos[voos[i].destino].chegadas++;  // Incrementa chegadas
+
+        printf("\n");
+    }
+
+    // ---------- Exibição do relatório final ----------
+    printf("\n=== RELATORIO DE AEROPORTOS ===\n");
+
+    for(i = 0; i < A; i++)
+    {
+        printf("Aeroporto %d:\n", aeroportos[i].codigo);
+        printf("  Voos que saem: %d\n", aeroportos[i].saidas);
+        printf("  Voos que chegam: %d\n", aeroportos[i].chegadas);
+        printf("\n");
+    }
+
+    system("pause"); // Pausa o programa no Windows
+    return 0;        // Retorna 0 para indicar execução bem-sucedida
+}
