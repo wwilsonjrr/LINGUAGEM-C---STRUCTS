@@ -1,0 +1,93 @@
+/*
+17. Faça um programa que controla o consumo de energia dos eletrodomésticos de uma casa e:
+
+- Crie e leia 5 eletrodomésticos que contêm nome (máximo 15 letras),
+  potência (real, em kW) e tempo ativo por dia (real, em horas).
+- Leia um tempo t (em dias), calcule e mostre o consumo total na casa
+  e o consumo relativo de cada eletrodoméstico (consumo/consumo total)
+  nesse período de tempo. Apresente este último dado em porcentagem.
+*/
+
+#include <stdio.h>    // Biblioteca padrão de entrada e saída (printf, scanf)
+#include <stdlib.h>   // Biblioteca padrão (para system("pause"))
+#include <string.h>   // Biblioteca para manipular strings (fgets, strcspn)
+
+
+// --- DEFINIÇÃO DA ESTRUTURA ---
+struct Eletrodomestico
+{
+    char nome[16];     // Nome do eletrodoméstico (até 15 letras + '\0')
+    float potencia;     // Potência do aparelho em kW
+    float tempoAtivo;   // Tempo médio ativo por dia (em horas) // O tempo de uso diário de um eletrodoméstico nem sempre é um número inteiro de horas
+};
+
+
+int main()
+{
+    struct Eletrodomestico lista[5];  // Vetor para armazenar os 5 aparelhos
+    int i;                            // Variável de controle do loop
+    float consumoTotal = 0;           // Variável para acumular o consumo total // Ela guarda a soma progressiva de vários valores ao longo do tempo (do loop)
+    float t;                          // Tempo total em dias // O período analisado pode não ser um número inteiro de dias
+
+    printf("=== Controle de Consumo de Energia ===\n\n");
+
+    // --- ENTRADA DE DADOS ---
+    for(i = 0; i < 5; i++)  // Loop para cadastrar os 5 eletrodomésticos
+    {
+        printf("Eletrodomestico %d:\n", i + 1);
+
+        // Lê o nome do aparelho
+        printf("Nome: ");
+        fgets(lista[i].nome, sizeof(lista[i].nome), stdin);  // Lê uma string (com espaços)
+        lista[i].nome[strcspn(lista[i].nome, "\n")] = '\0';  // Remove o '\n' deixado pelo fgets
+
+        // Lê a potência do aparelho (em kW)
+        printf("Potencia (em kW): ");
+        scanf("%f", &lista[i].potencia);
+
+        // Lê o tempo ativo diário (em horas)
+        printf("Tempo ativo por dia (em horas): ");
+        scanf("%f", &lista[i].tempoAtivo);
+
+        getchar();  // Limpa o ENTER que sobra no buffer
+        printf("\n");
+    }
+
+    // Lê o tempo em dias
+    printf("Informe o tempo total de uso (em dias): ");
+    scanf("%f", &t);
+
+    // --- CÁLCULO DO CONSUMO TOTAL ---
+    // O consumo de cada aparelho = potencia * tempoAtivo * t  // potencia = tempo ativo por dia (em horas) * tempo (em dias)
+    // O consumo total da casa é a soma dos consumos individuais
+    for(i = 0; i < 5; i++)
+    {
+        consumoTotal += lista[i].potencia * lista[i].tempoAtivo * t;
+    }
+
+    // --- SAÍDA DE DADOS ---
+    printf("\n=== Relatorio de Consumo ===\n");
+    printf("Tempo considerado: %.1f dias\n", t); // tempo em dias da casa
+    printf("Consumo total da casa: %.2f kWh\n\n", consumoTotal); // consumo total da casa
+
+    // Exibe o consumo individual e percentual de cada aparelho
+    for(i = 0; i < 5; i++)
+    {
+        // Calcula o consumo total do aparelho no período
+        float consumoAparelho = lista[i].potencia * lista[i].tempoAtivo * t;
+
+        // Calcula o consumo relativo do aparelho em relação ao consumo total
+        float consumoRelativo = consumoAparelho / consumoTotal;
+
+        // Calcula o percentual de participação no consumo total
+        float percentual = consumoRelativo * 100;
+
+        // Exibe os dados
+        printf("Aparelho: %s\n", lista[i].nome);
+        printf("Consumo: %.2f kWh\n", consumoAparelho);
+        printf("Participacao: %.2f%% do total\n\n", percentual);
+    }
+
+    system("pause");  // Pausa o programa (somente no Windows)
+    return 0;         // Encerra o programa com sucesso
+}
