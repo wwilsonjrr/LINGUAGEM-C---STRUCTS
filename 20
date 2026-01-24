@@ -1,0 +1,117 @@
+/*
+20. Faça um programa para armazenar um livro de receitas e:
+
+● Crie um vetor de 5 receitas, que deve ter nome (máximo 25 letras),
+  quantidade de ingredientes e ingredientes.
+
+● Para cada receita, leia seu nome e a quantidade de ingredientes.
+  Então crie e leia o vetor de ingredientes, sendo que cada ingrediente
+  contém nome e quantidade.
+
+● Procure receita por nome, mostrando seus ingredientes se encontrar.
+  Se não encontrar, informe ao usuário. Repita o processo até digitar uma string vazia.
+*/
+
+#include <stdio.h>    // Biblioteca padrão de entrada e saída (printf, scanf, fgets, etc.)
+#include <stdlib.h>   // Biblioteca padrão para funções utilitárias (ex: system("pause"))
+#include <string.h>   // Biblioteca usada para manipular strings (strlen, strcmp, strcspn)
+
+// --------------------------- Estrutura para um ingrediente ----------------------------
+struct Ingrediente
+{
+    char nome[25];      // Nome do ingrediente (máximo de 24 letras + '\0')
+    float quantidade;   // Quantidade do ingrediente (pode ter casas decimais)
+};
+
+// --------------------------- Estrutura para uma receita -------------------------------
+struct Receita
+{
+    char nome[26];                               // Nome da receita (máximo 25 letras + '\0')
+    int qtd_ingredientes;                        // Número de ingredientes da receita
+    struct Ingrediente ingredientes[10];         // Vetor que guarda os ingredientes
+};
+
+// --------------------------- Função principal -----------------------------------------
+int main()
+{
+    struct Receita receitas[5]; // Declara um vetor de 5 receitas
+    int i, j;                   // Variáveis auxiliares para laços for
+    char busca[26];             // Vetor para armazenar o nome da receita a ser buscada
+
+    printf("=== CADASTRO DE RECEITAS ===\n\n"); // Exibe o título do programa
+
+    // --------------------------- Entrada de dados das receitas ------------------------
+    for(i = 0; i < 5; i++)
+    {
+        printf("Receita %d:\n", i + 1);       // Exibe qual receita está sendo cadastrada
+
+        printf("Nome da receita: ");          // Solicita o nome da receita
+        fgets(receitas[i].nome, sizeof(receitas[i].nome), stdin); // Lê o nome da receita (aceita espaços)
+        receitas[i].nome[strcspn(receitas[i].nome, "\n")] = '\0'; // Remove o '\n' inserido por fgets
+
+        printf("Quantidade de ingredientes: ");   // Solicita a quantidade de ingredientes da receita
+        scanf("%d", &receitas[i].qtd_ingredientes); // Lê o número inteiro informado pelo usuário
+
+        // --------------------------- Leitura dos ingredientes -------------------------
+        for(j = 0; j < receitas[i].qtd_ingredientes; j++)
+        {
+            printf("  Ingrediente %d:\n", j + 1); // Exibe o número do ingrediente
+
+            printf("    Nome: ");                 // Solicita o nome do ingrediente
+            fgets(receitas[i].ingredientes[j].nome, sizeof(receitas[i].ingredientes[j].nome), stdin); // Lê o nome do ingrediente
+            receitas[i].ingredientes[j].nome[strcspn(receitas[i].ingredientes[j].nome, "\n")] = '\0'; // Remove o '\n' final da string
+
+            printf("    Quantidade: ");           // Solicita a quantidade do ingrediente
+            scanf("%f", &receitas[i].ingredientes[j].quantidade); // Lê o valor (float) da quantidade
+        }
+
+        printf("\n"); // Pula uma linha entre receitas para melhor visualização
+    }
+
+    // --------------------------- Busca de receitas ------------------------------------
+    printf("=== CONSULTA DE RECEITAS ===\n\n"); // Exibe um título para a parte de pesquisa
+
+    while(1)
+    {
+        printf("Digite o nome da receita que deseja buscar (ou ENTER para sair): ");
+        fgets(busca, sizeof(busca), stdin);     // Lê o nome da receita digitado pelo usuário
+        busca[strcspn(busca, "\n")] = '\0';     // Remove o '\n' final inserido pelo fgets
+
+        if(strlen(busca) == 0) // Conta quantas strings tem a busca
+        {
+            printf("\nEncerrando o programa...\n"); // Informa que vai encerrar
+            break;                                  // Sai do loop while
+        }
+
+        int encontrada = 0; // Flag (variável lógica) para indicar se a receita foi encontrada (inicializa com 0, como se não fosse encontrada ainda)
+
+        // --------------------------- Procura a receita no vetor -----------------------
+        for(i = 0; i < 5; i++)
+        {
+            if(strcmp(receitas[i].nome, busca) == 0) // (é utilizado o 0 por excessão só para o caso do strcmp que compara)
+            {
+                encontrada = 1; // Marca que a receita foi encontrada
+                printf("\nReceita encontrada: %s\n", receitas[i].nome); // Exibe o nome da receita
+                printf("Ingredientes:\n"); // Título da lista de ingredientes
+
+                // --------------------------- Lista os ingredientes da receita --------
+                for(j = 0; j < receitas[i].qtd_ingredientes; j++)
+                {
+                    printf("  - %s: %.2f\n", receitas[i].ingredientes[j].nome, receitas[i].ingredientes[j].quantidade);
+                }
+
+                printf("\n"); // Pula uma linha após exibir os ingredientes
+                break;        // Sai do laço for (não precisa continuar procurando)
+            }
+        }
+
+        // --------------------------- Caso a receita não exista ------------------------
+        if(!encontrada)
+        {
+            printf("\nReceita nao encontrada.\n\n"); // Exibe mensagem de erro
+        }
+    }
+
+    system("pause"); // Pausa o programa (apenas no Windows)
+    return 0;        // Retorna 0 indicando que o programa terminou corretamente
+}
