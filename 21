@@ -1,0 +1,125 @@
+/*
+21. Faça um programa que armazene filmes produzidos por vários diretores e:
+
+● Crie e leia um vetor de 5 diretores, cada um contendo nome (máximo 20 letras),
+  quantidade de filmes e filmes. O membro filmes é um vetor, que deve ser criado
+  após ter lido a quantidade de filmes. Cada filme é composto por nome, ano e duração.
+
+● Procure um diretor por nome, mostrando todos os filmes que ele já produziu.
+  Repita o processo até digitar uma string vazia.
+*/
+
+#include <stdio.h>    // Biblioteca padrão de entrada e saída (printf, scanf, fgets)
+#include <stdlib.h>   // Biblioteca padrão para system("pause") e outras funções utilitárias
+#include <string.h>   // Biblioteca para manipulação de strings (strcmp, strlen, strcspn)
+
+
+// ---------------------------- Estrutura de um filme ----------------------------
+struct Filme
+{
+    char nome[30];    // Nome do filme (máximo 29 letras + '\0')
+    int ano;          // Ano de lançamento do filme
+    int duracao;      // Duração do filme em minutos
+};
+
+// ---------------------------- Estrutura de um diretor --------------------------
+struct Diretor
+{
+    char nome[21];           // Nome do diretor (máximo 20 letras + '\0')
+    int qtd_filmes;          // Quantidade de filmes que o diretor produziu
+    struct Filme filmes[10]; // Vetor que armazena os filmes do diretor
+};
+
+
+// ---------------------------- Função principal ---------------------------------
+int main()
+{
+    struct Diretor diretores[5];  // Declara um vetor com 5 diretores
+    int i, j;                     // Variáveis auxiliares para laços for
+    char busca[21];               // String usada para buscar o nome de um diretor
+    int encontrado;               // Flag para verificar se o diretor foi encontrado
+
+    printf("=== CADASTRO DE DIRETORES E FILMES ===\n\n"); // Exibe o título do programa
+
+    // ---------------------------- Leitura dos diretores ------------------------
+    for(i = 0; i < 5; i++)
+    {
+        printf("Diretor %d:\n", i + 1); // Exibe o número do diretor atual
+
+        printf("Nome do diretor: "); // Solicita o nome do diretor
+        fgets(diretores[i].nome, sizeof(diretores[i].nome), stdin); // Lê o nome
+        diretores[i].nome[strcspn(diretores[i].nome, "\n")] = '\0'; // Remove '\n'
+
+        printf("Quantidade de filmes: "); // Solicita a quantidade de filmes
+        scanf("%d", &diretores[i].qtd_filmes); // Lê a quantidade de filmes
+        getchar();
+
+        // ---------------------------- Leitura dos filmes -----------------------
+        for(j = 0; j < diretores[i].qtd_filmes; j++)
+        {
+            printf("  Filme %d:\n", j + 1); // Exibe o número do filme atual
+
+            printf("    Nome do filme: "); // Solicita o nome do filme
+            fgets(diretores[i].filmes[j].nome, sizeof(diretores[i].filmes[j].nome), stdin);                  // Lê o nome do filme
+            diretores[i].filmes[j].nome[strcspn(diretores[i].filmes[j].nome, "\n")] = '\0'; // Remove '\n'
+
+            printf("    Ano de lancamento: "); // Solicita o ano do filme
+            scanf("%d", &diretores[i].filmes[j].ano); // Lê o ano
+            getchar();
+
+            printf("    Duracao (em minutos): "); // Solicita a duração
+            scanf("%d", &diretores[i].filmes[j].duracao); // Lê a duração
+            getchar();
+        }
+
+        printf("\n"); // Linha em branco entre diretores
+    }
+
+    // ---------------------------- Busca de diretores ---------------------------
+    printf("=== CONSULTA DE FILMES POR DIRETOR ===\n\n"); // Cabeçalho da consulta
+
+    while(1)
+    {
+        printf("Digite o nome do diretor (ou ENTER para sair): ");
+        fgets(busca, sizeof(busca), stdin); // Lê o nome buscado
+        busca[strcspn(busca, "\n")] = '\0'; // Remove '\n'
+
+        if(strlen(busca) == 0) // Se contar a string tiver 0 caractere
+        {
+            printf("\nEncerrando o programa...\n");
+            break;
+        }
+
+        encontrado = 0; // Inicializa flag
+
+        // ---------------------------- Procura o diretor -----------------------
+        for(i = 0; i < 5; i++)
+        {
+            if(strcmp(diretores[i].nome, busca) == 0) // Se a comparação tiver caracteres iguais
+            {
+                encontrado = 1;
+
+                printf("\nDiretor encontrado: %s\n", diretores[i].nome);
+                printf("Filmes produzidos:\n");
+
+                // ---------------------------- Lista de filmes ----------------
+                for(j = 0; j < diretores[i].qtd_filmes; j++)
+                {
+                    printf("  - %s (%d) - %d min\n", diretores[i].filmes[j].nome, diretores[i].filmes[j].ano, diretores[i].filmes[j].duracao);
+                }
+
+                printf("\n");
+                break;
+            }
+        }
+
+        // ---------------------------- Caso diretor não encontrado -------------
+        if(!encontrado)
+        {
+            printf("\nDiretor nao encontrado.\n\n");
+        }
+    }
+
+    system("pause"); // Pausa o programa antes de encerrar (Windows)
+    return 0;        // Indica término correto do programa
+}
