@@ -77,18 +77,18 @@ int main()
         fgets(busca, sizeof(busca), stdin);     // Lê o nome da receita digitado pelo usuário
         busca[strcspn(busca, "\n")] = '\0';     // Remove o '\n' final inserido pelo fgets
 
-        if(strlen(busca) == 0) // Conta quantas strings tem a busca
+        if(strlen(busca) == 0) // se o número de caracteres da string busca for 0
         {
             printf("\nEncerrando o programa...\n"); // Informa que vai encerrar
             break;                                  // Sai do loop while
         }
 
-        int encontrada = 0; // Flag (variável lógica) para indicar se a receita foi encontrada (inicializa com 0, como se não fosse encontrada ainda)
+        int encontrada = 0; // Flag: inicializa com 0, não encontrada
 
         // --------------------------- Procura a receita no vetor -----------------------
         for(i = 0; i < 5; i++)
         {
-            if(strcmp(receitas[i].nome, busca) == 0) // (é utilizado o 0 por excessão só para o caso do strcmp que compara)
+            if(strcmp(receitas[i].nome, busca) == 0) // se os caracteres das strings fore iguais
             {
                 encontrada = 1; // Marca que a receita foi encontrada
                 printf("\nReceita encontrada: %s\n", receitas[i].nome); // Exibe o nome da receita
@@ -115,3 +115,4 @@ int main()
     system("pause"); // Pausa o programa (apenas no Windows)
     return 0;        // Retorna 0 indicando que o programa terminou corretamente
 }
+
