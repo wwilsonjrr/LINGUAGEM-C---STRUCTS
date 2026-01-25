@@ -1,0 +1,181 @@
+/*
+22. Definir a estrutura cuja representação gráfica é dada a seguir,
+    definir os campos com os tipos básicos necessários.
+
+Cadastro
+-----------------------------------------------------------
+| NOME | ENDEREÇO | SALÁRIO |
+| IDENTIDADE | CPF | ESTADO CIVIL |
+| TELEFONE | IDADE | SEXO |
+
+O ENDEREÇO é composto de:
+--------------------------------------------
+| RUA | BAIRRO | CIDADE |
+| ESTADO | CEP |
+
+(a) Crie um vetor Cadastro com 5 elementos.
+(b) Permita ao usuário entrar com dados para preencher esses 5 cadastros.
+(c) Encontre a pessoa com maior idade entre os cadastrados.
+(d) Encontre as pessoas do sexo masculino.
+(e) Encontre as pessoas com salário maior que 1000.
+(f) Imprima os dados da pessoa cuja identidade seja igual a um valor fornecido pelo usuário.
+
+Esse padrão se chama Allman Style
+*/
+
+#include <stdio.h>    // Biblioteca padrão de entrada e saída (printf, scanf, fgets)
+#include <stdlib.h>   // Biblioteca padrão (para system("pause"))
+#include <string.h>   // Biblioteca para manipulação de strings (strcmp, strlen, strcspn)
+
+// ---------------------------- Estrutura ENDEREÇO ----------------------------
+// Esta estrutura representa o bloco "ENDEREÇO" do diagrama.
+struct Endereco
+{
+    char rua[40];     // Campo RUA - até 39 caracteres + '\0'
+    char bairro[30];  // Campo BAIRRO - até 29 caracteres + '\0'
+    char cidade[30];  // Campo CIDADE - até 29 caracteres + '\0'
+    char estado[3];   // Campo ESTADO - sigla com 2 letras + '\0'
+    char cep[10];     // Campo CEP - formato "XXXXX-XXX"
+};
+
+// ---------------------------- Estrutura CADASTRO ----------------------------
+// Esta estrutura contém todos os campos do diagrama principal.
+struct Cadastro
+{
+    char nome[40];            // Campo NOME - nome completo da pessoa
+    char identidade[15];      // Campo IDENTIDADE - número do RG
+    char telefone[15];        // Campo TELEFONE - telefone com DDD
+    char cpf[15];             // Campo CPF - número do CPF
+    int idade;                // Campo IDADE - idade da pessoa
+    char sexo;                // Campo SEXO - 'M' ou 'F'
+    float salario;            // Campo SALÁRIO - valor em reais
+    char estado_civil[15];    // Campo ESTADO CIVIL - solteiro, casado, etc.
+    struct Endereco endereco; // Campo ENDEREÇO (estrutura aninhada)
+};
+
+// ---------------------------- Função principal ----------------------------
+int main()
+{
+    // ---------------------------- (a) Vetor de 5 cadastros ----------------------------
+    struct Cadastro pessoa[5];   // Vetor com 5 elementos do tipo Cadastro
+
+    int i;                       // Variável auxiliar para controle dos laços
+
+    // ---------------------------- (b) Leitura dos 5 cadastros -------------------------
+    for (i = 0; i < 5; i++)
+    {
+        printf("\n=== CADASTRO %d ===\n", i + 1);
+
+        printf("Nome: ");
+        fgets(pessoa[i].nome, sizeof(pessoa[i].nome), stdin);
+        pessoa[i].nome[strcspn(pessoa[i].nome, "\n")] = '\0';
+
+        printf("Identidade (RG): ");
+        fgets(pessoa[i].identidade, sizeof(pessoa[i].identidade), stdin);
+        pessoa[i].identidade[strcspn(pessoa[i].identidade, "\n")] = '\0';
+
+        printf("Telefone: ");
+        fgets(pessoa[i].telefone, sizeof(pessoa[i].telefone), stdin);
+        pessoa[i].telefone[strcspn(pessoa[i].telefone, "\n")] = '\0';
+
+        printf("CPF: ");
+        fgets(pessoa[i].cpf, sizeof(pessoa[i].cpf), stdin);
+        pessoa[i].cpf[strcspn(pessoa[i].cpf, "\n")] = '\0';
+
+        printf("Idade: ");
+        scanf("%d", &pessoa[i].idade);
+        getchar(); // Limpa o buffer
+
+        printf("Sexo (M/F): ");
+        scanf("%c", &pessoa[i].sexo);
+        getchar(); // Limpa o buffer
+
+        printf("Salario: ");
+        scanf("%f", &pessoa[i].salario);
+        getchar(); // Limpa o buffer
+
+        printf("Estado civil: ");
+        fgets(pessoa[i].estado_civil, sizeof(pessoa[i].estado_civil), stdin);
+        pessoa[i].estado_civil[strcspn(pessoa[i].estado_civil, "\n")] = '\0';
+
+        printf("Rua: ");
+        fgets(pessoa[i].endereco.rua, sizeof(pessoa[i].endereco.rua), stdin);
+        pessoa[i].endereco.rua[strcspn(pessoa[i].endereco.rua, "\n")] = '\0';
+
+        printf("Bairro: ");
+        fgets(pessoa[i].endereco.bairro, sizeof(pessoa[i].endereco.bairro), stdin);
+        pessoa[i].endereco.bairro[strcspn(pessoa[i].endereco.bairro, "\n")] = '\0';
+
+        printf("Cidade: ");
+        fgets(pessoa[i].endereco.cidade, sizeof(pessoa[i].endereco.cidade), stdin);
+        pessoa[i].endereco.cidade[strcspn(pessoa[i].endereco.cidade, "\n")] = '\0';
+
+        printf("Estado (sigla): ");
+        fgets(pessoa[i].endereco.estado, sizeof(pessoa[i].endereco.estado), stdin);
+        pessoa[i].endereco.estado[strcspn(pessoa[i].endereco.estado, "\n")] = '\0';
+
+        printf("CEP: ");
+        fgets(pessoa[i].endereco.cep, sizeof(pessoa[i].endereco.cep), stdin);
+        pessoa[i].endereco.cep[strcspn(pessoa[i].endereco.cep, "\n")] = '\0';
+    }
+
+    // ---------------------------- (c) Pessoa com maior idade ----------------------------
+    int indiceMaiorIdade = 0; // inicializa com o primeiro índice sendo o de maior idade
+
+    for (i = 1; i < 5; i++) // como eu já inicializei com o índice 0, o loop começa com o índice 1
+    {
+        if (pessoa[i].idade > pessoa[indiceMaiorIdade].idade)
+        {
+            indiceMaiorIdade = i;
+        }
+    }
+
+    printf("\n=== PESSOA COM MAIOR IDADE ===\n");
+    printf("Nome: %s\n", pessoa[indiceMaiorIdade].nome);
+    printf("Idade: %d\n", pessoa[indiceMaiorIdade].idade);
+
+    // ---------------------------- (d) Pessoas do sexo masculino ----------------------------
+    printf("\n=== PESSOAS DO SEXO MASCULINO ===\n");
+
+    for (i = 0; i < 5; i++)
+    {
+        if (pessoa[i].sexo == 'M')
+        {
+            printf("%s\n", pessoa[i].nome);
+        }
+    }
+
+    // ---------------------------- (e) Pessoas com salário maior que 1000 ----------------------------
+    printf("\n=== PESSOAS COM SALARIO MAIOR QUE 1000 ===\n");
+
+    for (i = 0; i < 5; i++)
+    {
+        if (pessoa[i].salario > 1000)
+        {
+            printf("%s | %.2f\n", pessoa[i].nome, pessoa[i].salario);
+        }
+    }
+
+    // ---------------------------- (f) Busca por identidade ----------------------------
+    char busca[15];
+
+    printf("\nDigite a identidade para busca: ");
+    fgets(busca, sizeof(busca), stdin);
+    busca[strcspn(busca, "\n")] = '\0';
+
+    for (i = 0; i < 5; i++)
+    {
+        if (strcmp(pessoa[i].identidade, busca) == 0)
+        {
+            printf("\n=== CADASTRO ENCONTRADO ===\n");
+            printf("Nome: %s\n", pessoa[i].nome);
+            printf("Identidade: %s\n", pessoa[i].identidade);
+            printf("CPF: %s\n", pessoa[i].cpf);
+            printf("Idade: %d\n", pessoa[i].idade);
+            printf("Salario: %.2f\n", pessoa[i].salario);
+        }
+    }
+
+    system("pause");
+    return 0;
+}
