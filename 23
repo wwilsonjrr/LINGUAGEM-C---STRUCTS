@@ -1,0 +1,131 @@
+/*
+23. Escreva um programa que receba dois structs do tipo dma,
+    cada um representando uma data válida,
+    e calcule o número de dias que decorreram entre as duas datas.
+
+Estrutura base fornecida:
+
+struct dma {
+    int dia;
+    int mes;
+    int ano;
+};
+
+
+O que o enunciado pede
+
+“receba dois structs do tipo dma”
+
+Isso não significa criar duas estruturas diferentes, e sim:
+
+1 definição de struct (o “molde”)
+
+2 variáveis desse tipo (duas datas)
+*/
+
+#include <stdio.h>   // Biblioteca padrão de entrada e saída (printf, scanf)
+#include <stdlib.h>  // Biblioteca padrão (system("pause"), abs)
+
+// ---------------------------- Estrutura de Data (dma) ----------------------------
+struct dma
+{
+    int dia;   // Dia da data (1 a 31)
+    int mes;   // Mês da data (1 a 12)
+    int ano;   // Ano (ex: 2026)
+};
+
+// ---------------------------- Função principal ------------------------------------
+int main()
+{
+    struct dma data1, data2;      // Declara duas variáveis do tipo struct dma (duas datas)
+    int dias1 = 0, dias2 = 0;     // Total de dias desde o "ano 0" para cada data
+    int diferenca = 0;            // Diferença final entre as datas
+
+    printf("=== CALCULO DE DIAS ENTRE DUAS DATAS ===\n\n"); // Título do programa
+
+    // ---------------------------- Leitura da primeira data ------------------------
+    printf("Digite a primeira data:\n");  // Solicita a primeira data
+
+    printf("Dia: ");         // Pede o dia
+    scanf("%d", &data1.dia); // Lê o valor e armazena no campo dia
+
+    printf("Mes: ");         // Pede o mês
+    scanf("%d", &data1.mes); // Lê o valor e armazena no campo mes
+
+    printf("Ano: ");         // Pede o ano
+    scanf("%d", &data1.ano); // Lê o valor e armazena no campo ano
+
+    // ---------------------------- Leitura da segunda data ------------------------
+    printf("\nDigite a segunda data:\n");  // Solicita a segunda data
+
+    printf("Dia: ");         // Pede o dia
+    scanf("%d", &data2.dia); // Lê o valor e armazena no campo dia
+
+    printf("Mes: ");         // Pede o mês
+    scanf("%d", &data2.mes); // Lê o valor e armazena no campo mes
+
+    printf("Ano: ");         // Pede o ano
+    scanf("%d", &data2.ano); // Lê o valor e armazena no campo ano
+
+
+    // ---------------------------- Vetor de dias dos meses (ano comum) ----------------
+    int diasMes[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+    // ---------------------------- Conversão da data1 em dias totais -----------------
+    // Soma todos os dias dos anos anteriores ao ano de data1
+    for (int ano = 1; ano < data1.ano; ano++)
+    {
+        // Verifica se o ano é bissexto:
+        // bissexto se (divisível por 4 e não por 100) ou (divisível por 400)
+        if ((ano % 4 == 0 && ano % 100 != 0) || (ano % 400 == 0))
+            dias1 += 366;  // Ano bissexto
+        else
+            dias1 += 365;  // Ano comum
+    }
+
+    // Soma os dias dos meses anteriores no mesmo ano de data1
+    for (int mes = 1; mes < data1.mes; mes++)
+    {
+        // Se for fevereiro (mes == 2) e o ano de data1 for bissexto, fevereiro tem 29 dias
+        if (mes == 2 && ((data1.ano % 4 == 0 && data1.ano % 100 != 0) || (data1.ano % 400 == 0)))
+            dias1 += 29;
+        else
+            dias1 += diasMes[mes - 1]; // mes 1..12 vira índice 0..11
+    }
+
+    // Soma os dias do mês atual (dia)
+    dias1 += data1.dia;
+
+    // ---------------------------- Conversão da data2 em dias totais -----------------
+    // Soma todos os dias dos anos anteriores ao ano de data2
+    for (int ano = 1; ano < data2.ano; ano++)
+    {
+        // Verifica se o ano é bissexto:
+        if ((ano % 4 == 0 && ano % 100 != 0) || (ano % 400 == 0))
+            dias2 += 366;  // Ano bissexto
+        else
+            dias2 += 365;  // Ano comum
+    }
+
+    // Soma os dias dos meses anteriores no mesmo ano de data2
+    for (int mes = 1; mes < data2.mes; mes++)
+    {
+        // Se for fevereiro e o ano de data2 for bissexto, fevereiro tem 29 dias
+        if (mes == 2 && ((data2.ano % 4 == 0 && data2.ano % 100 != 0) || (data2.ano % 400 == 0)))
+            dias2 += 29;
+        else
+            dias2 += diasMes[mes - 1]; // mes 1..12 vira índice 0..11
+    }
+
+    // Soma os dias do mês atual (dia)
+    dias2 += data2.dia;
+
+    // ---------------------------- Diferença absoluta entre as datas ----------------
+    diferenca = abs(dias2 - dias1);  // Usa abs() para garantir que o valor seja positivo
+
+    // ---------------------------- Exibição do resultado ----------------------------
+    printf("\nNumero de dias decorridos entre as duas datas: %d\n", diferenca);
+
+    system("pause"); // Pausa o console no Windows até o usuário pressionar uma tecla
+    return 0;        // Retorna 0 indicando execução bem-sucedida
+}
